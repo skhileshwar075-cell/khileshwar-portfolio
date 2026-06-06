@@ -8,7 +8,8 @@
     "build": "node ./build.mjs",
     "start": "node --enable-source-maps ./dist/index.mjs",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "db:push": "drizzle-kit push --config ./drizzle.config.ts"
+    "db:push": "drizzle-kit push --config ./drizzle.config.ts",
+    "db:seed": "pnpm dlx tsx src/db/seed.ts"
   },
   "dependencies": {
     "cookie-parser": "^1.4.7",
