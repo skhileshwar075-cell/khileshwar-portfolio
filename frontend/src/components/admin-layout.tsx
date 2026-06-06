@@ -11,6 +11,7 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
   SidebarFooter,
+  SidebarTrigger,
 } from "./ui/sidebar";
 import {
   LayoutDashboard,
@@ -28,6 +29,7 @@ import {
 } from "lucide-react";
 import { useEffect } from "react";
 import { Button } from "./ui/button";
+import { Separator } from "./ui/separator";
 
 const navItems = [
   { href: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -42,9 +44,22 @@ const navItems = [
   { href: "/admin/settings", label: "Settings", icon: Settings },
 ];
 
+function AdminTopBar() {
+  const [location] = useLocation();
+  const current = navItems.find((item) => location.startsWith(item.href));
+  return (
+    <header className="sticky top-0 z-20 flex h-12 items-center gap-2 border-b bg-background/95 backdrop-blur px-4">
+      <SidebarTrigger className="-ml-1" />
+      <Separator orientation="vertical" className="h-4" />
+      <span className="text-sm font-medium text-foreground">
+        {current?.label ?? "Admin"}
+      </span>
+    </header>
+  );
+}
+
 export function AdminLayout({ children }: { children: React.ReactNode }) {
   const [location, setLocation] = useLocation();
-  // useGetCurrentUser returns { user: {...} | null } — unwrap .user
   const { data, isLoading } = useGetCurrentUser();
   const currentUser = data?.user ?? null;
 
@@ -56,7 +71,6 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
     }
   }, [currentUser, isLoading, isLoginPage, setLocation]);
 
-  // Show full-screen loader while checking auth
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
@@ -68,77 +82,83 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
     );
   }
 
-  // Not authenticated and not on login — redirect handled by useEffect, show nothing
   if (!currentUser && !isLoginPage) {
     return null;
   }
 
-  // On the login page — render it fullscreen (no sidebar)
   if (isLoginPage) {
     return <>{children}</>;
   }
 
   return (
     <SidebarProvider>
-      <div className="flex min-h-[100dvh] w-full">
-        <Sidebar>
-          <SidebarHeader className="border-b px-4 py-3">
-            <div>
-              <h2 className="text-lg font-bold">Admin Panel</h2>
+      <Sidebar collapsible="icon">
+        <SidebarHeader className="border-b px-4 py-3">
+          <div className="flex items-center gap-2 overflow-hidden">
+            <div className="min-w-0">
+              <h2 className="text-sm font-bold leading-none truncate group-data-[collapsible=icon]:hidden">
+                Admin Panel
+              </h2>
               {currentUser && (
-                <p className="text-xs text-muted-foreground truncate">
+                <p className="text-xs text-muted-foreground truncate mt-0.5 group-data-[collapsible=icon]:hidden">
                   {currentUser.firstName
                     ? `${currentUser.firstName} ${currentUser.lastName ?? ""}`.trim()
                     : currentUser.email ?? ""}
                 </p>
               )}
             </div>
-          </SidebarHeader>
-          <SidebarContent>
-            <SidebarGroup>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  {navItems.map((item) => (
-                    <SidebarMenuItem key={item.href}>
-                      <SidebarMenuButton
-                        asChild
-                        isActive={location.startsWith(item.href)}
-                        tooltip={item.label}
-                      >
-                        <Link href={item.href}>
-                          <item.icon />
-                          <span>{item.label}</span>
-                        </Link>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  ))}
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
-          </SidebarContent>
-          <SidebarFooter className="border-t p-4 space-y-2">
-            <Button variant="outline" className="w-full justify-start" asChild>
-              <Link href="/">
-                <Globe className="mr-2 h-4 w-4" />
-                View Portfolio
-              </Link>
-            </Button>
-            <Button
-              variant="ghost"
-              className="w-full justify-start text-destructive hover:text-destructive/90"
-              asChild
-            >
-              <a href="/api/logout">
-                <LogOut className="mr-2 h-4 w-4" />
-                Log out
-              </a>
-            </Button>
-          </SidebarFooter>
-        </Sidebar>
-        <main className="flex-1 overflow-y-auto bg-background">
+          </div>
+        </SidebarHeader>
+
+        <SidebarContent>
+          <SidebarGroup>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {navItems.map((item) => (
+                  <SidebarMenuItem key={item.href}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={location.startsWith(item.href)}
+                      tooltip={item.label}
+                    >
+                      <Link href={item.href}>
+                        <item.icon />
+                        <span>{item.label}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        </SidebarContent>
+
+        <SidebarFooter className="border-t p-4 space-y-2">
+          <Button variant="outline" className="w-full justify-start group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0" asChild>
+            <Link href="/">
+              <Globe className="h-4 w-4 shrink-0" />
+              <span className="ml-2 group-data-[collapsible=icon]:hidden">View Portfolio</span>
+            </Link>
+          </Button>
+          <Button
+            variant="ghost"
+            className="w-full justify-start text-destructive hover:text-destructive/90 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
+            asChild
+          >
+            <a href="/api/logout">
+              <LogOut className="h-4 w-4 shrink-0" />
+              <span className="ml-2 group-data-[collapsible=icon]:hidden">Log out</span>
+            </a>
+          </Button>
+        </SidebarFooter>
+      </Sidebar>
+
+      <main className="flex flex-col flex-1 min-w-0 overflow-hidden bg-background">
+        <AdminTopBar />
+        <div className="flex-1 overflow-y-auto">
           {children}
-        </main>
-      </div>
+        </div>
+      </main>
     </SidebarProvider>
   );
 }

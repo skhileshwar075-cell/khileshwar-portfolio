@@ -195,7 +195,6 @@ export default function Projects() {
                         </span>
                       </div>
                     </div>
-                  </div>
                 );
               })}
             </div>
