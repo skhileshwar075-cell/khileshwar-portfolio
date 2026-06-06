@@ -1,12 +1,8 @@
-import { Link } from "wouter";
+import { Link, useParams } from "wouter";
 import { useGetBlogPostBySlug } from "@workspace/api-client-react";
 import { ArrowLeft, Calendar, Clock, Tag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-
-interface Props {
-  params: { slug: string };
-}
 
 function formatDate(dateStr: string | null | undefined) {
   if (!dateStr) return "";
@@ -22,7 +18,6 @@ function readingTime(content: string | null | undefined) {
   return Math.max(1, Math.ceil(content.trim().split(/\s+/).length / 200));
 }
 
-// Simple markdown-to-HTML renderer (no extra deps needed)
 function renderMarkdown(md: string) {
   const html = md
     .replace(/```(\w*)\n([\s\S]*?)```/g, (_m, _lang, code) =>
@@ -46,8 +41,9 @@ function renderMarkdown(md: string) {
   return `<p class="my-4 leading-relaxed text-muted-foreground">${html}</p>`;
 }
 
-export default function BlogPost({ params }: Props) {
-  const { data: post, isLoading, isError } = useGetBlogPostBySlug({ slug: params.slug });
+export default function BlogPost() {
+  const { slug } = useParams<{ slug: string }>();
+  const { data: post, isLoading, isError } = useGetBlogPostBySlug(slug ?? "");
 
   if (isLoading) {
     return (
@@ -89,7 +85,6 @@ export default function BlogPost({ params }: Props) {
           </Button>
         </Link>
 
-        {/* Header */}
         <header className="mb-10">
           <div className="flex flex-wrap gap-2 mb-4">
             {post.category && <Badge variant="secondary">{post.category}</Badge>}
@@ -110,7 +105,6 @@ export default function BlogPost({ params }: Props) {
           </div>
         </header>
 
-        {/* Content */}
         {post.content && (
           <div
             className="prose prose-invert max-w-none"
@@ -118,7 +112,6 @@ export default function BlogPost({ params }: Props) {
           />
         )}
 
-        {/* Tags */}
         {tags.length > 0 && (
           <div className="mt-10 pt-6 border-t border-border flex flex-wrap gap-2">
             <Tag className="h-4 w-4 text-muted-foreground mt-0.5" />

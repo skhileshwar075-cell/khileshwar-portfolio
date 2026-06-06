@@ -1,15 +1,12 @@
-import { Link } from "wouter";
+import { Link, useParams } from "wouter";
 import { useGetProjectBySlug } from "@workspace/api-client-react";
 import { ExternalLink, Github, ArrowLeft, Star, CheckCircle2, Lightbulb, Bug } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
-interface Props {
-  params: { slug: string };
-}
-
-export default function ProjectDetail({ params }: Props) {
-  const { data: project, isLoading, isError } = useGetProjectBySlug({ slug: params.slug });
+export default function ProjectDetail() {
+  const { slug } = useParams<{ slug: string }>();
+  const { data: project, isLoading, isError } = useGetProjectBySlug(slug ?? "");
 
   if (isLoading) {
     return (
@@ -44,17 +41,15 @@ export default function ProjectDetail({ params }: Props) {
   return (
     <div className="min-h-screen py-20 px-4">
       <div className="max-w-4xl mx-auto">
-        {/* Back */}
         <Link href="/projects">
           <Button variant="ghost" size="sm" className="mb-8 -ml-2">
             <ArrowLeft className="h-4 w-4 mr-2" /> Back to Projects
           </Button>
         </Link>
 
-        {/* Header */}
         <div className="mb-10">
           <div className="flex flex-wrap items-center gap-3 mb-4">
-            <Badge variant="secondary">{project.category}</Badge>
+            <Badge variant="secondary" className="capitalize">{project.category}</Badge>
             <Badge
               variant={project.status === "completed" ? "default" : "outline"}
               className="capitalize"
@@ -70,7 +65,6 @@ export default function ProjectDetail({ params }: Props) {
           <h1 className="text-3xl md:text-4xl font-bold mb-4">{project.title}</h1>
           <p className="text-xl text-muted-foreground mb-6">{project.shortDescription}</p>
 
-          {/* Tech Stack */}
           <div className="flex flex-wrap gap-2 mb-6">
             {techStack.map((tech) => (
               <span
@@ -82,7 +76,6 @@ export default function ProjectDetail({ params }: Props) {
             ))}
           </div>
 
-          {/* Links */}
           <div className="flex gap-3">
             {project.githubUrl && (
               <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
@@ -101,7 +94,6 @@ export default function ProjectDetail({ params }: Props) {
           </div>
         </div>
 
-        {/* Content sections */}
         <div className="space-y-8">
           {project.problemStatement && (
             <section className="bg-card border border-border rounded-xl p-6">

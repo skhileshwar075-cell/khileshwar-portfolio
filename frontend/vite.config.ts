@@ -73,6 +73,9 @@ export default defineConfig({
         changeOrigin: true,
       },
     },
+    hmr: {
+      clientPort: 443,
+    },
   },
   preview: {
     port,
