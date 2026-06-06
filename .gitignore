@@ -1,49 +1,68 @@
-# See https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
+# ── Dependencies ────────────────────────────────────────────────
+node_modules/
+.pnpm-store/
 
-# compiled output
-dist
-tmp
-out-tsc
+# ── Build output ────────────────────────────────────────────────
+dist/
+build/
+out/
+tmp/
+out-tsc/
 *.tsbuildinfo
-.expo
-.expo-shared
 
-# dependencies
-node_modules
+# ── Environment & secrets ────────────────────────────────────────
+.env
+.env.*
+!.env.example
 
-# IDEs and editors
-/.idea
-.project
-.classpath
-.c9/
-*.launch
-.settings/
-*.sublime-workspace
+# ── Database ─────────────────────────────────────────────────────
+drizzle/
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
 
-# IDE - VSCode
+# ── Logs ────────────────────────────────────────────────────────
+*.log
+npm-debug.log*
+yarn-error.log
+pnpm-debug.log*
+/coverage/
+/libpeerconnection.log
+
+# ── Vite / frontend ─────────────────────────────────────────────
+.vite/
+/.sass-cache/
+/typings/
+
+# ── Expo / React Native ─────────────────────────────────────────
+.expo/
+.expo-shared/
+
+# ── IDEs ────────────────────────────────────────────────────────
+.idea/
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+*.sublime-workspace
+.project
+.classpath
+.c9/
+*.launch
+.settings/
 
-# misc
-/.sass-cache
-/connect.lock
-/coverage
-/libpeerconnection.log
-npm-debug.log
-yarn-error.log
-testem.log
-/typings
-
-# System Files
+# ── OS ──────────────────────────────────────────────────────────
 .DS_Store
 Thumbs.db
+desktop.ini
 
-.cursor/rules/nx-rules.mdc
-.github/instructions/nx.instructions.md
-
-# Replit
+# ── Replit ──────────────────────────────────────────────────────
 .cache/
 .local/
+
+# ── Misc ────────────────────────────────────────────────────────
+/connect.lock
+testem.log
+.cursor/rules/nx-rules.mdc
+.github/instructions/nx.instructions.md
