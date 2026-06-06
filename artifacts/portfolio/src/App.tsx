@@ -28,6 +28,7 @@ import ExperiencePage from "@/pages/public/experience";
 import Certifications from "@/pages/public/certifications";
 import Blog from "@/pages/public/blog";
 import BlogPost from "@/pages/public/blog-post";
+import Education from "@/pages/public/education";
 import Contact from "@/pages/public/contact";
 
 const queryClient = new QueryClient({
@@ -80,6 +81,7 @@ function Router() {
         <Route path="/projects/:slug" component={ProjectDetail} />
         <Route path="/skills" component={Skills} />
         <Route path="/experience" component={ExperiencePage} />
+        <Route path="/education" component={Education} />
         <Route path="/certifications" component={Certifications} />
         <Route path="/blog" component={Blog} />
         <Route path="/blog/:slug" component={BlogPost} />
