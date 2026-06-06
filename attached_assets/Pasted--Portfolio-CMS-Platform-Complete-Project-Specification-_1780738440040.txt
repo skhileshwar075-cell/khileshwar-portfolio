@@ -1,0 +1,638 @@
+# Portfolio CMS Platform - Complete Project Specification
+
+## Project Overview
+
+Build a modern full-stack Portfolio CMS platform for a Computer Science graduate and AI-assisted developer.
+
+This is NOT a static portfolio website.
+
+The application must consist of:
+
+1. Public Portfolio Website
+2. Secure Admin Dashboard
+3. Portfolio Content Management System (CMS)
+4. Analytics Dashboard
+5. Blog Management System
+
+The goal is to allow the portfolio owner to manage all portfolio content from a dashboard without editing code.
+
+---
+
+# Technology Stack
+
+## Frontend
+
+* React
+* Vite
+* Tailwind CSS
+* shadcn/ui
+* Framer Motion
+* React Hook Form
+* Zustand
+
+## Backend
+
+* Node.js
+* Express.js
+
+## Database
+
+* PostgreSQL
+* Prisma ORM
+
+## Authentication
+
+* JWT Authentication
+* bcrypt Password Hashing
+
+## File Storage
+
+* Cloudinary
+
+## Deployment Ready
+
+* Frontend: Vercel
+* Backend: Render
+* Database: PostgreSQL
+
+---
+
+# User Roles
+
+## Admin
+
+Single Admin User
+
+Can:
+
+* Login
+* Manage Projects
+* Manage Skills
+* Manage Experience
+* Manage Education
+* Manage Certificates
+* Manage Blog Posts
+* Upload Resume
+* View Contact Messages
+* View Analytics
+* Manage Site Settings
+
+## Visitor
+
+Can:
+
+* View Portfolio
+* View Projects
+* View Blog Posts
+* Download Resume
+* Contact Me
+
+---
+
+# Public Portfolio Pages
+
+## Home Page
+
+Hero Section
+
+Contains:
+
+* Professional Introduction
+* Name
+* Dynamic Typing Animation
+* CTA Buttons
+
+  * View Projects
+  * Download Resume
+  * Contact Me
+
+Statistics Section
+
+* Projects Count
+* Certifications Count
+* Technologies Count
+* Experience Count
+
+Featured Projects Preview
+
+Skills Preview
+
+Latest Blog Posts
+
+Contact CTA
+
+---
+
+## About Page
+
+Include:
+
+* Personal Introduction
+* Career Objectives
+* Educational Background
+* Interests
+* Development Philosophy
+
+---
+
+## Skills Page
+
+Display categorized skills:
+
+Frontend
+
+* HTML
+* CSS
+* JavaScript
+* React
+
+Backend
+
+* Node.js
+* Express.js
+
+Database
+
+* PostgreSQL
+* MySQL
+
+Testing
+
+* Manual Testing
+* Bug Reporting
+
+AI Tools
+
+* ChatGPT
+* GitHub Copilot
+* Claude
+
+Each skill should support:
+
+* Name
+* Category
+* Level Percentage
+* Icon
+
+---
+
+## Projects Page
+
+Project Cards
+
+Each project should contain:
+
+* Thumbnail
+* Name
+* Description
+* Technologies
+* Status
+* Featured Badge
+
+Filters:
+
+* All
+* Web Development
+* AI
+* Academic
+* Full Stack
+* Testing
+
+Search Functionality
+
+---
+
+## Project Detail Page
+
+Must include:
+
+* Project Overview
+* Problem Statement
+* Solution
+* Features
+* Technology Stack
+* Architecture Diagram
+* Screenshots Gallery
+* Demo Video
+* Challenges Faced
+* Future Scope
+* GitHub Repository Link
+* Live Demo Link
+
+---
+
+## Experience Page
+
+Timeline Layout
+
+Fields:
+
+* Company
+* Position
+* Duration
+* Description
+
+---
+
+## Education Page
+
+Timeline Layout
+
+Fields:
+
+* Degree
+* Institution
+* Duration
+* Description
+* Grade
+
+---
+
+## Certifications Page
+
+Grid Layout
+
+Fields:
+
+* Title
+* Issuer
+* Issue Date
+* Credential URL
+* Certificate Image
+
+Modal Preview Support
+
+---
+
+## Blog Page
+
+Blog Listing
+
+Features:
+
+* Search
+* Categories
+* Tags
+
+Blog Detail Page
+
+Support:
+
+* Rich Content
+* Markdown Rendering
+* Code Blocks
+* Images
+
+---
+
+## Contact Page
+
+Fields:
+
+* Name
+* Email
+* Subject
+* Message
+
+Validation Required
+
+Store all submissions in database.
+
+---
+
+# Admin Dashboard
+
+## Login Page
+
+Features:
+
+* Email Login
+* Password Login
+* JWT Authentication
+* Remember Me
+
+Protected Routes
+
+---
+
+## Dashboard Home
+
+Statistics Cards
+
+Display:
+
+* Total Projects
+* Total Skills
+* Total Blog Posts
+* Total Certificates
+* Total Visitors
+* Total Contact Messages
+
+Recent Activities Section
+
+Charts Section
+
+---
+
+# Project Management Module
+
+Create Project
+
+Edit Project
+
+Delete Project
+
+Archive Project
+
+Fields:
+
+* Title
+* Slug
+* Short Description
+* Detailed Description
+* Problem Statement
+* Solution
+* Features
+* Tech Stack
+* Architecture Diagram
+* GitHub URL
+* Live Demo URL
+* Featured
+* Category
+* Status
+* Thumbnail
+* Screenshots
+* Demo Video
+
+---
+
+# Skills Management Module
+
+CRUD Operations
+
+Fields:
+
+* Name
+* Category
+* Level
+* Icon
+
+---
+
+# Experience Management Module
+
+CRUD Operations
+
+Fields:
+
+* Organization
+* Position
+* Start Date
+* End Date
+* Description
+
+---
+
+# Education Management Module
+
+CRUD Operations
+
+Fields:
+
+* Degree
+* Institution
+* Start Date
+* End Date
+* Grade
+* Description
+
+---
+
+# Certificate Management Module
+
+CRUD Operations
+
+Fields:
+
+* Title
+* Issuer
+* Date
+* Credential URL
+* Image Upload
+
+---
+
+# Resume Management
+
+Upload Resume
+
+Replace Existing Resume
+
+PDF Storage
+
+Download Tracking
+
+---
+
+# Blog Management
+
+Create Post
+
+Edit Post
+
+Delete Post
+
+Draft Mode
+
+Publish Mode
+
+Fields:
+
+* Title
+* Slug
+* Content
+* Tags
+* Category
+* Featured Image
+* Published Status
+
+Markdown Support Required
+
+---
+
+# Contact Management
+
+Inbox Interface
+
+Display:
+
+* Name
+* Email
+* Subject
+* Message
+* Date
+
+Actions:
+
+* Mark Read
+* Archive
+* Delete
+
+---
+
+# Analytics Module
+
+Track:
+
+* Total Visitors
+* Daily Visitors
+* Monthly Visitors
+* Most Viewed Projects
+* Resume Downloads
+* Contact Form Submissions
+
+Dashboard Charts Required
+
+---
+
+# Settings Module
+
+Manage:
+
+* Site Title
+* Site Description
+* Meta Keywords
+* Hero Text
+* Social Media Links
+* GitHub URL
+* LinkedIn URL
+* Resume URL
+
+Theme Settings
+
+* Dark Mode
+* Light Mode
+* Primary Color
+
+---
+
+# Database Design
+
+Tables Required
+
+users
+projects
+project_images
+skills
+experience
+education
+certificates
+blogs
+blog_categories
+blog_tags
+contacts
+analytics
+settings
+resume
+
+Use Prisma Schema Design.
+
+---
+
+# UI Requirements
+
+Modern SaaS Dashboard Design
+
+Responsive Design
+
+Mobile First
+
+Dark Mode
+
+Light Mode
+
+Smooth Animations
+
+Professional Color Palette
+
+Accessibility Best Practices
+
+Loading States
+
+Error Handling
+
+Toast Notifications
+
+Confirmation Dialogs
+
+Skeleton Loaders
+
+---
+
+# Security Requirements
+
+Password Hashing
+
+JWT Authentication
+
+Protected Routes
+
+Input Validation
+
+Rate Limiting
+
+XSS Protection
+
+CSRF Protection
+
+Secure File Upload
+
+Environment Variables
+
+---
+
+# Portfolio Content Focus
+
+The portfolio owner is a Computer Science graduate with experience in:
+
+* Full Stack Development
+* Web Development
+* Database Management
+* Software Testing
+* AI-Assisted Development
+* Hackathons
+* Student Projects
+
+Featured project example:
+
+Smart Secure Student Attendance Management System
+
+Features:
+
+* QR Attendance
+* Face Verification
+* Geolocation Validation
+* Faculty Dashboard
+* Student Dashboard
+* Analytics Dashboard
+
+---
+
+# Deliverables
+
+Generate:
+
+1. Complete Folder Structure
+2. Database Schema
+3. Prisma Models
+4. Backend APIs
+5. React Frontend
+6. Admin Dashboard
+7. Authentication System
+8. File Upload System
+9. Analytics System
+10. Deployment Configuration
+11. Environment Variables Template
+12. README Documentation
+
+Build production-ready code with scalability, maintainability, and clean architecture principles.

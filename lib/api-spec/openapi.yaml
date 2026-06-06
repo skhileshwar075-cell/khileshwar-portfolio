@@ -3,20 +3,42 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: Portfolio CMS API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: auth
+    description: Authentication
+  - name: projects
+    description: Project management
+  - name: skills
+    description: Skills management
+  - name: experience
+    description: Experience management
+  - name: education
+    description: Education management
+  - name: certificates
+    description: Certificate management
+  - name: blog
+    description: Blog management
+  - name: contacts
+    description: Contact management
+  - name: analytics
+    description: Analytics
+  - name: settings
+    description: Site settings
+  - name: dashboard
+    description: Dashboard summary
+
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -24,13 +46,1368 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  # Auth
+  /auth/user:
+    get:
+      operationId: getCurrentUser
+      tags: [auth]
+      summary: Get current auth user
+      responses:
+        "200":
+          description: Current user or null
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthUser"
+        "401":
+          description: Not authenticated
+
+  # Dashboard summary (wow endpoint)
+  /dashboard/summary:
+    get:
+      operationId: getDashboardSummary
+      tags: [dashboard]
+      summary: Get admin dashboard summary stats
+      responses:
+        "200":
+          description: Summary stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardSummary"
+
+  # Projects
+  /projects:
+    get:
+      operationId: listProjects
+      tags: [projects]
+      summary: List all projects (public)
+      parameters:
+        - name: category
+          in: query
+          schema:
+            type: string
+        - name: featured
+          in: query
+          schema:
+            type: boolean
+        - name: search
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of projects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Project"
+    post:
+      operationId: createProject
+      tags: [projects]
+      summary: Create a new project (admin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProjectInput"
+      responses:
+        "201":
+          description: Created project
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Project"
+
+  /projects/{id}:
+    get:
+      operationId: getProject
+      tags: [projects]
+      summary: Get project by id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Project
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Project"
+        "404":
+          description: Not found
+    patch:
+      operationId: updateProject
+      tags: [projects]
+      summary: Update project (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProjectUpdate"
+      responses:
+        "200":
+          description: Updated project
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Project"
+    delete:
+      operationId: deleteProject
+      tags: [projects]
+      summary: Delete project (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  /projects/slug/{slug}:
+    get:
+      operationId: getProjectBySlug
+      tags: [projects]
+      summary: Get project by slug (public)
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Project
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Project"
+        "404":
+          description: Not found
+
+  # Skills
+  /skills:
+    get:
+      operationId: listSkills
+      tags: [skills]
+      summary: List all skills (public)
+      responses:
+        "200":
+          description: List of skills
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Skill"
+    post:
+      operationId: createSkill
+      tags: [skills]
+      summary: Create a skill (admin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SkillInput"
+      responses:
+        "201":
+          description: Created skill
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Skill"
+
+  /skills/{id}:
+    patch:
+      operationId: updateSkill
+      tags: [skills]
+      summary: Update a skill (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SkillUpdate"
+      responses:
+        "200":
+          description: Updated skill
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Skill"
+    delete:
+      operationId: deleteSkill
+      tags: [skills]
+      summary: Delete a skill (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  # Experience
+  /experience:
+    get:
+      operationId: listExperience
+      tags: [experience]
+      summary: List experience entries (public)
+      responses:
+        "200":
+          description: List of experience
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Experience"
+    post:
+      operationId: createExperience
+      tags: [experience]
+      summary: Create experience entry (admin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ExperienceInput"
+      responses:
+        "201":
+          description: Created experience
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Experience"
+
+  /experience/{id}:
+    patch:
+      operationId: updateExperience
+      tags: [experience]
+      summary: Update experience entry (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ExperienceUpdate"
+      responses:
+        "200":
+          description: Updated experience
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Experience"
+    delete:
+      operationId: deleteExperience
+      tags: [experience]
+      summary: Delete experience entry (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  # Education
+  /education:
+    get:
+      operationId: listEducation
+      tags: [education]
+      summary: List education entries (public)
+      responses:
+        "200":
+          description: List of education
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Education"
+    post:
+      operationId: createEducation
+      tags: [education]
+      summary: Create education entry (admin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EducationInput"
+      responses:
+        "201":
+          description: Created education
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Education"
+
+  /education/{id}:
+    patch:
+      operationId: updateEducation
+      tags: [education]
+      summary: Update education entry (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EducationUpdate"
+      responses:
+        "200":
+          description: Updated education
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Education"
+    delete:
+      operationId: deleteEducation
+      tags: [education]
+      summary: Delete education entry (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  # Certificates
+  /certificates:
+    get:
+      operationId: listCertificates
+      tags: [certificates]
+      summary: List certificates (public)
+      responses:
+        "200":
+          description: List of certificates
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Certificate"
+    post:
+      operationId: createCertificate
+      tags: [certificates]
+      summary: Create certificate (admin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CertificateInput"
+      responses:
+        "201":
+          description: Created certificate
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Certificate"
+
+  /certificates/{id}:
+    patch:
+      operationId: updateCertificate
+      tags: [certificates]
+      summary: Update certificate (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CertificateUpdate"
+      responses:
+        "200":
+          description: Updated certificate
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Certificate"
+    delete:
+      operationId: deleteCertificate
+      tags: [certificates]
+      summary: Delete certificate (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  # Blog Posts
+  /blog:
+    get:
+      operationId: listBlogPosts
+      tags: [blog]
+      summary: List blog posts (public - published only unless admin)
+      parameters:
+        - name: category
+          in: query
+          schema:
+            type: string
+        - name: tag
+          in: query
+          schema:
+            type: string
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: published
+          in: query
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: List of blog posts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BlogPost"
+    post:
+      operationId: createBlogPost
+      tags: [blog]
+      summary: Create blog post (admin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BlogPostInput"
+      responses:
+        "201":
+          description: Created blog post
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BlogPost"
+
+  /blog/{id}:
+    get:
+      operationId: getBlogPost
+      tags: [blog]
+      summary: Get blog post by id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Blog post
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BlogPost"
+        "404":
+          description: Not found
+    patch:
+      operationId: updateBlogPost
+      tags: [blog]
+      summary: Update blog post (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BlogPostUpdate"
+      responses:
+        "200":
+          description: Updated blog post
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BlogPost"
+    delete:
+      operationId: deleteBlogPost
+      tags: [blog]
+      summary: Delete blog post (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  /blog/slug/{slug}:
+    get:
+      operationId: getBlogPostBySlug
+      tags: [blog]
+      summary: Get blog post by slug (public)
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Blog post
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BlogPost"
+        "404":
+          description: Not found
+
+  # Contacts
+  /contacts:
+    get:
+      operationId: listContacts
+      tags: [contacts]
+      summary: List contact submissions (admin)
+      parameters:
+        - name: read
+          in: query
+          schema:
+            type: boolean
+        - name: archived
+          in: query
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: List of contacts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Contact"
+    post:
+      operationId: submitContact
+      tags: [contacts]
+      summary: Submit contact form (public)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ContactInput"
+      responses:
+        "201":
+          description: Contact submitted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Contact"
+
+  /contacts/{id}:
+    patch:
+      operationId: updateContact
+      tags: [contacts]
+      summary: Update contact status (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ContactUpdate"
+      responses:
+        "200":
+          description: Updated contact
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Contact"
+    delete:
+      operationId: deleteContact
+      tags: [contacts]
+      summary: Delete contact (admin)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  # Analytics
+  /analytics/track:
+    post:
+      operationId: trackEvent
+      tags: [analytics]
+      summary: Track an analytics event (public)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AnalyticsEventInput"
+      responses:
+        "201":
+          description: Event tracked
+
+  /analytics/summary:
+    get:
+      operationId: getAnalyticsSummary
+      tags: [analytics]
+      summary: Get analytics summary (admin)
+      responses:
+        "200":
+          description: Analytics summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AnalyticsSummary"
+
+  /analytics/project-views:
+    get:
+      operationId: getProjectViews
+      tags: [analytics]
+      summary: Get most viewed projects (admin)
+      responses:
+        "200":
+          description: Project view counts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProjectViewCount"
+
+  # Settings
+  /settings:
+    get:
+      operationId: getSettings
+      tags: [settings]
+      summary: Get site settings
+      responses:
+        "200":
+          description: Site settings
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SiteSettings"
+    patch:
+      operationId: updateSettings
+      tags: [settings]
+      summary: Update site settings (admin)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SiteSettingsUpdate"
+      responses:
+        "200":
+          description: Updated settings
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SiteSettings"
+
 components:
   schemas:
     HealthStatus:
       type: object
+      required: [status]
       properties:
         status:
           type: string
-      required:
-        - status
 
+    AuthUser:
+      type: object
+      required: [id, username]
+      properties:
+        id:
+          type: string
+        username:
+          type: string
+        firstName:
+          type: ["string", "null"]
+        lastName:
+          type: ["string", "null"]
+        profileImage:
+          type: ["string", "null"]
+
+    DashboardSummary:
+      type: object
+      required: [totalProjects, totalSkills, totalBlogPosts, totalCertificates, totalContacts, totalVisitors, unreadContacts, featuredProjects, publishedPosts, draftPosts]
+      properties:
+        totalProjects:
+          type: integer
+        totalSkills:
+          type: integer
+        totalBlogPosts:
+          type: integer
+        totalCertificates:
+          type: integer
+        totalContacts:
+          type: integer
+        totalVisitors:
+          type: integer
+        unreadContacts:
+          type: integer
+        featuredProjects:
+          type: integer
+        publishedPosts:
+          type: integer
+        draftPosts:
+          type: integer
+        resumeDownloads:
+          type: integer
+        totalExperience:
+          type: integer
+        totalEducation:
+          type: integer
+
+    Project:
+      type: object
+      required: [id, title, slug, shortDescription, status, category, featured, createdAt, updatedAt]
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        slug:
+          type: string
+        shortDescription:
+          type: string
+        description:
+          type: ["string", "null"]
+        problemStatement:
+          type: ["string", "null"]
+        solution:
+          type: ["string", "null"]
+        features:
+          type: ["string", "null"]
+        techStack:
+          type: array
+          items:
+            type: string
+        githubUrl:
+          type: ["string", "null"]
+        liveDemoUrl:
+          type: ["string", "null"]
+        featured:
+          type: boolean
+        category:
+          type: string
+        status:
+          type: string
+        thumbnailUrl:
+          type: ["string", "null"]
+        screenshotUrls:
+          type: array
+          items:
+            type: string
+        demoVideoUrl:
+          type: ["string", "null"]
+        challenges:
+          type: ["string", "null"]
+        futureScope:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+
+    ProjectInput:
+      type: object
+      required: [title, slug, shortDescription, category]
+      properties:
+        title:
+          type: string
+          minLength: 1
+        slug:
+          type: string
+          minLength: 1
+        shortDescription:
+          type: string
+        description:
+          type: string
+        problemStatement:
+          type: string
+        solution:
+          type: string
+        features:
+          type: string
+        techStack:
+          type: array
+          items:
+            type: string
+        githubUrl:
+          type: string
+        liveDemoUrl:
+          type: string
+        featured:
+          type: boolean
+        category:
+          type: string
+        status:
+          type: string
+        thumbnailUrl:
+          type: string
+        screenshotUrls:
+          type: array
+          items:
+            type: string
+        demoVideoUrl:
+          type: string
+        challenges:
+          type: string
+        futureScope:
+          type: string
+
+    ProjectUpdate:
+      type: object
+      properties:
+        title:
+          type: string
+        slug:
+          type: string
+        shortDescription:
+          type: string
+        description:
+          type: string
+        problemStatement:
+          type: string
+        solution:
+          type: string
+        features:
+          type: string
+        techStack:
+          type: array
+          items:
+            type: string
+        githubUrl:
+          type: string
+        liveDemoUrl:
+          type: string
+        featured:
+          type: boolean
+        category:
+          type: string
+        status:
+          type: string
+        thumbnailUrl:
+          type: string
+        screenshotUrls:
+          type: array
+          items:
+            type: string
+        demoVideoUrl:
+          type: string
+        challenges:
+          type: string
+        futureScope:
+          type: string
+
+    Skill:
+      type: object
+      required: [id, name, category, level, createdAt]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        category:
+          type: string
+        level:
+          type: integer
+        icon:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+
+    SkillInput:
+      type: object
+      required: [name, category, level]
+      properties:
+        name:
+          type: string
+          minLength: 1
+        category:
+          type: string
+        level:
+          type: integer
+          minimum: 0
+          maximum: 100
+        icon:
+          type: string
+
+    SkillUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        category:
+          type: string
+        level:
+          type: integer
+          minimum: 0
+          maximum: 100
+        icon:
+          type: string
+
+    Experience:
+      type: object
+      required: [id, organization, position, startDate, createdAt]
+      properties:
+        id:
+          type: integer
+        organization:
+          type: string
+        position:
+          type: string
+        startDate:
+          type: string
+        endDate:
+          type: ["string", "null"]
+        description:
+          type: ["string", "null"]
+        current:
+          type: boolean
+        createdAt:
+          type: string
+
+    ExperienceInput:
+      type: object
+      required: [organization, position, startDate]
+      properties:
+        organization:
+          type: string
+          minLength: 1
+        position:
+          type: string
+          minLength: 1
+        startDate:
+          type: string
+        endDate:
+          type: string
+        description:
+          type: string
+        current:
+          type: boolean
+
+    ExperienceUpdate:
+      type: object
+      properties:
+        organization:
+          type: string
+        position:
+          type: string
+        startDate:
+          type: string
+        endDate:
+          type: string
+        description:
+          type: string
+        current:
+          type: boolean
+
+    Education:
+      type: object
+      required: [id, degree, institution, startDate, createdAt]
+      properties:
+        id:
+          type: integer
+        degree:
+          type: string
+        institution:
+          type: string
+        startDate:
+          type: string
+        endDate:
+          type: ["string", "null"]
+        grade:
+          type: ["string", "null"]
+        description:
+          type: ["string", "null"]
+        current:
+          type: boolean
+        createdAt:
+          type: string
+
+    EducationInput:
+      type: object
+      required: [degree, institution, startDate]
+      properties:
+        degree:
+          type: string
+          minLength: 1
+        institution:
+          type: string
+          minLength: 1
+        startDate:
+          type: string
+        endDate:
+          type: string
+        grade:
+          type: string
+        description:
+          type: string
+        current:
+          type: boolean
+
+    EducationUpdate:
+      type: object
+      properties:
+        degree:
+          type: string
+        institution:
+          type: string
+        startDate:
+          type: string
+        endDate:
+          type: string
+        grade:
+          type: string
+        description:
+          type: string
+        current:
+          type: boolean
+
+    Certificate:
+      type: object
+      required: [id, title, issuer, issueDate, createdAt]
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        issuer:
+          type: string
+        issueDate:
+          type: string
+        credentialUrl:
+          type: ["string", "null"]
+        imageUrl:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+
+    CertificateInput:
+      type: object
+      required: [title, issuer, issueDate]
+      properties:
+        title:
+          type: string
+          minLength: 1
+        issuer:
+          type: string
+          minLength: 1
+        issueDate:
+          type: string
+        credentialUrl:
+          type: string
+        imageUrl:
+          type: string
+
+    CertificateUpdate:
+      type: object
+      properties:
+        title:
+          type: string
+        issuer:
+          type: string
+        issueDate:
+          type: string
+        credentialUrl:
+          type: string
+        imageUrl:
+          type: string
+
+    BlogPost:
+      type: object
+      required: [id, title, slug, published, createdAt, updatedAt]
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        slug:
+          type: string
+        content:
+          type: ["string", "null"]
+        excerpt:
+          type: ["string", "null"]
+        category:
+          type: ["string", "null"]
+        tags:
+          type: array
+          items:
+            type: string
+        featuredImageUrl:
+          type: ["string", "null"]
+        published:
+          type: boolean
+        publishedAt:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+
+    BlogPostInput:
+      type: object
+      required: [title, slug]
+      properties:
+        title:
+          type: string
+          minLength: 1
+        slug:
+          type: string
+          minLength: 1
+        content:
+          type: string
+        excerpt:
+          type: string
+        category:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        featuredImageUrl:
+          type: string
+        published:
+          type: boolean
+
+    BlogPostUpdate:
+      type: object
+      properties:
+        title:
+          type: string
+        slug:
+          type: string
+        content:
+          type: string
+        excerpt:
+          type: string
+        category:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        featuredImageUrl:
+          type: string
+        published:
+          type: boolean
+
+    Contact:
+      type: object
+      required: [id, name, email, subject, message, read, archived, createdAt]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+        subject:
+          type: string
+        message:
+          type: string
+        read:
+          type: boolean
+        archived:
+          type: boolean
+        createdAt:
+          type: string
+
+    ContactInput:
+      type: object
+      required: [name, email, subject, message]
+      properties:
+        name:
+          type: string
+          minLength: 1
+        email:
+          type: string
+          minLength: 1
+        subject:
+          type: string
+          minLength: 1
+        message:
+          type: string
+          minLength: 1
+
+    ContactUpdate:
+      type: object
+      properties:
+        read:
+          type: boolean
+        archived:
+          type: boolean
+
+    AnalyticsEventInput:
+      type: object
+      required: [type]
+      properties:
+        type:
+          type: string
+        projectId:
+          type: integer
+        blogPostId:
+          type: integer
+        referrer:
+          type: string
+
+    AnalyticsSummary:
+      type: object
+      required: [totalVisitors, todayVisitors, resumeDownloads, contactSubmissions]
+      properties:
+        totalVisitors:
+          type: integer
+        todayVisitors:
+          type: integer
+        weeklyVisitors:
+          type: integer
+        monthlyVisitors:
+          type: integer
+        resumeDownloads:
+          type: integer
+        contactSubmissions:
+          type: integer
+
+    ProjectViewCount:
+      type: object
+      required: [projectId, projectTitle, views]
+      properties:
+        projectId:
+          type: integer
+        projectTitle:
+          type: string
+        views:
+          type: integer
+
+    SiteSettings:
+      type: object
+      required: [id]
+      properties:
+        id:
+          type: integer
+        siteTitle:
+          type: ["string", "null"]
+        siteDescription:
+          type: ["string", "null"]
+        metaKeywords:
+          type: ["string", "null"]
+        heroText:
+          type: ["string", "null"]
+        heroSubtext:
+          type: ["string", "null"]
+        githubUrl:
+          type: ["string", "null"]
+        linkedinUrl:
+          type: ["string", "null"]
+        twitterUrl:
+          type: ["string", "null"]
+        resumeUrl:
+          type: ["string", "null"]
+        ownerName:
+          type: ["string", "null"]
+        ownerTitle:
+          type: ["string", "null"]
+        ownerBio:
+          type: ["string", "null"]
+        avatarUrl:
+          type: ["string", "null"]
+        primaryColor:
+          type: ["string", "null"]
+
+    SiteSettingsUpdate:
+      type: object
+      properties:
+        siteTitle:
+          type: string
+        siteDescription:
+          type: string
+        metaKeywords:
+          type: string
+        heroText:
+          type: string
+        heroSubtext:
+          type: string
+        githubUrl:
+          type: string
+        linkedinUrl:
+          type: string
+        twitterUrl:
+          type: string
+        resumeUrl:
+          type: string
+        ownerName:
+          type: string
+        ownerTitle:
+          type: string
+        ownerBio:
+          type: string
+        avatarUrl:
+          type: string
+        primaryColor:
+          type: string
