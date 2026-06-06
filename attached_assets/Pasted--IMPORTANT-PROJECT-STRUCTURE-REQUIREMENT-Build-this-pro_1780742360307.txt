@@ -1,0 +1,175 @@
+# IMPORTANT PROJECT STRUCTURE REQUIREMENT
+
+Build this project using a clean, production-ready full-stack architecture.
+
+DO NOT create custom structures such as:
+
+* lib/
+* scripts/
+* attached_assets/
+* artifacts/
+
+Use the exact folder structure below:
+
+```text
+portfolio-cms/
+│
+├── frontend/
+│   ├── public/
+│   ├── src/
+│   │   ├── assets/
+│   │   ├── components/
+│   │   ├── layouts/
+│   │   ├── pages/
+│   │   ├── hooks/
+│   │   ├── services/
+│   │   ├── store/
+│   │   ├── routes/
+│   │   ├── utils/
+│   │   ├── contexts/
+│   │   ├── styles/
+│   │   ├── App.jsx
+│   │   └── main.jsx
+│   │
+│   ├── package.json
+│   └── vite.config.js
+│
+├── backend/
+│   ├── src/
+│   │   ├── config/
+│   │   ├── controllers/
+│   │   ├── middleware/
+│   │   ├── routes/
+│   │   ├── services/
+│   │   ├── models/
+│   │   ├── validators/
+│   │   ├── utils/
+│   │   ├── uploads/
+│   │   ├── app.js
+│   │   └── server.js
+│   │
+│   ├── prisma/
+│   │   ├── schema.prisma
+│   │   └── migrations/
+│   │
+│   ├── package.json
+│   └── .env.example
+│
+├── docs/
+│   ├── architecture.md
+│   ├── api-documentation.md
+│   └── deployment-guide.md
+│
+├── README.md
+├── .gitignore
+└── docker-compose.yml
+```
+
+# Architecture Requirements
+
+Frontend and backend must be completely separated.
+
+Frontend:
+
+* React
+* Vite
+* Tailwind CSS
+* shadcn/ui
+* Framer Motion
+* React Hook Form
+* Zustand
+
+Backend:
+
+* Node.js
+* Express.js
+* PostgreSQL
+* Prisma ORM
+* JWT Authentication
+
+# API Architecture
+
+Backend must expose REST APIs.
+
+Example:
+
+```text
+/api/auth
+/api/projects
+/api/skills
+/api/experience
+/api/education
+/api/certificates
+/api/blogs
+/api/messages
+/api/settings
+/api/analytics
+```
+
+Frontend must consume APIs through service files.
+
+Example:
+
+```text
+frontend/src/services/
+├── authService.js
+├── projectService.js
+├── blogService.js
+├── skillService.js
+└── analyticsService.js
+```
+
+# Admin Dashboard
+
+Create separate admin routes:
+
+```text
+/admin/login
+/admin/dashboard
+/admin/projects
+/admin/skills
+/admin/blogs
+/admin/certificates
+/admin/messages
+/admin/settings
+```
+
+# Public Portfolio Routes
+
+```text
+/
+/about
+/projects
+/projects/:slug
+/blog
+/blog/:slug
+/certificates
+/contact
+```
+
+# Code Quality Requirements
+
+* Clean architecture
+* Reusable components
+* Environment variables
+* Error handling
+* Validation
+* Loading states
+* Mobile responsive
+* SEO optimized
+
+# GitHub Requirements
+
+The repository must look professional when pushed to GitHub.
+
+Required root folders:
+
+```text
+frontend/
+backend/
+docs/
+```
+
+No business logic should exist outside frontend/src or backend/src.
+
+Generate the entire project following this exact folder structure.
