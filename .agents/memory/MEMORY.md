@@ -1,0 +1,4 @@
+- [Vite hoist pattern](vite-hoist-pattern.md) — pnpm must hoist vite/@vitejs/@tailwindcss/@replit to root or .vite-temp config runner can't resolve them
+- [esbuild path aliases](esbuild-path-aliases.md) — esbuild ignores tsconfig paths; must mirror them in build.mjs alias map
+- [localhost:80 is backend](replit-port-routing.md) — inside the container, localhost:80 maps to the backend (port 8080); path routing (/→frontend, /api→backend) only applies externally
+- [flat layout inlined libs](flat-layout.md) — lib/* packages were inlined into backend/src/ and frontend/src/ with tsconfig path aliases; flat layout at repo root instead of artifacts/

@@ -1,0 +1,18 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "incremental": true,
+    "tsBuildInfoFile": ".tsbuildinfo",
+    "outDir": "dist",
+    "rootDir": "src",
+    "types": ["node"],
+    "paths": {
+      "@workspace/db": ["./src/db/index.ts"],
+      "@workspace/db/*": ["./src/db/*"],
+      "@workspace/api-zod": ["./src/validators/index.ts"],
+      "@workspace/api-zod/*": ["./src/validators/*"]
+    }
+  },
+  "include": ["src"],
+  "references": []
+}
