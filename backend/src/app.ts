@@ -2,6 +2,7 @@ import express, { type Express } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import pinoHttp from "pino-http";
+import http from "http";
 import router from "./routes";
 import { logger } from "./lib/logger";
 import { authMiddleware } from "./middlewares/authMiddleware";
@@ -34,5 +35,26 @@ app.use(express.urlencoded({ extended: true }));
 app.use(authMiddleware);
 
 app.use("/api", router);
+
+if (process.env.NODE_ENV !== "production") {
+  const VITE_PORT = Number(process.env.VITE_PORT ?? 5173);
+  app.use((req, res) => {
+    const options: http.RequestOptions = {
+      hostname: "localhost",
+      port: VITE_PORT,
+      path: req.url,
+      method: req.method,
+      headers: { ...req.headers, host: `localhost:${VITE_PORT}` },
+    };
+    const proxyReq = http.request(options, (proxyRes) => {
+      res.writeHead(proxyRes.statusCode ?? 502, proxyRes.headers);
+      proxyRes.pipe(res, { end: true });
+    });
+    proxyReq.on("error", () => {
+      res.status(502).send("Frontend dev server not available");
+    });
+    req.pipe(proxyReq, { end: true });
+  });
+}
 
 export default app;
