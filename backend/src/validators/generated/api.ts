@@ -769,7 +769,13 @@ export const GetSettingsResponse = zod.object({
   "ownerTitle": zod.string().nullish(),
   "ownerBio": zod.string().nullish(),
   "avatarUrl": zod.string().nullish(),
-  "primaryColor": zod.string().nullish()
+  "primaryColor": zod.string().nullish(),
+  "card1Title": zod.string().nullish(),
+  "card1Body": zod.string().nullish(),
+  "card2Title": zod.string().nullish(),
+  "card2Body": zod.string().nullish(),
+  "card3Title": zod.string().nullish(),
+  "card3Body": zod.string().nullish()
 })
 
 
@@ -790,7 +796,13 @@ export const UpdateSettingsBody = zod.object({
   "ownerTitle": zod.string().optional(),
   "ownerBio": zod.string().optional(),
   "avatarUrl": zod.string().optional(),
-  "primaryColor": zod.string().optional()
+  "primaryColor": zod.string().optional(),
+  "card1Title": zod.string().optional(),
+  "card1Body": zod.string().optional(),
+  "card2Title": zod.string().optional(),
+  "card2Body": zod.string().optional(),
+  "card3Title": zod.string().optional(),
+  "card3Body": zod.string().optional()
 })
 
 export const UpdateSettingsResponse = zod.object({
@@ -808,7 +820,13 @@ export const UpdateSettingsResponse = zod.object({
   "ownerTitle": zod.string().nullish(),
   "ownerBio": zod.string().nullish(),
   "avatarUrl": zod.string().nullish(),
-  "primaryColor": zod.string().nullish()
+  "primaryColor": zod.string().nullish(),
+  "card1Title": zod.string().nullish(),
+  "card1Body": zod.string().nullish(),
+  "card2Title": zod.string().nullish(),
+  "card2Body": zod.string().nullish(),
+  "card3Title": zod.string().nullish(),
+  "card3Body": zod.string().nullish()
 })
 
 

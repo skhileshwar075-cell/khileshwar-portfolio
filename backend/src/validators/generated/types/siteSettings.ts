@@ -36,4 +36,16 @@ export interface SiteSettings {
   avatarUrl?: string | null;
   /** @nullable */
   primaryColor?: string | null;
+  /** @nullable */
+  card1Title?: string | null;
+  /** @nullable */
+  card1Body?: string | null;
+  /** @nullable */
+  card2Title?: string | null;
+  /** @nullable */
+  card2Body?: string | null;
+  /** @nullable */
+  card3Title?: string | null;
+  /** @nullable */
+  card3Body?: string | null;
 }

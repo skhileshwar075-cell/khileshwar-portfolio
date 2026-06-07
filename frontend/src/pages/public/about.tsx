@@ -10,7 +10,7 @@ function Reveal({
   className = "",
 }: {
   children: React.ReactNode;
-  delay?: string;
+  delay?: "delay-100" | "delay-200" | "delay-300" | "delay-400" | "delay-500";
   className?: string;
 }) {
   const ref = useScrollReveal<HTMLDivElement>(delay);
@@ -30,27 +30,36 @@ function getInitials(name: string) {
     .toUpperCase();
 }
 
-const APPROACH_CARDS = [
+const CARD_STYLES = [
   {
-    icon: <Cpu className="h-5 w-5 text-primary" />,
-    title: "AI-Augmented Development",
-    body: "I treat AI tools as a superpower — GitHub Copilot, Claude, and ChatGPT are part of my daily workflow, letting me ship faster without sacrificing quality.",
+    defaultIcon: <Cpu className="h-5 w-5 text-primary" />,
     gradient: "from-blue-500/10 to-cyan-500/10",
     border: "border-blue-500/20",
   },
   {
-    icon: <Zap className="h-5 w-5 text-yellow-500" />,
-    title: "Hackathon Mindset",
-    body: "Fast iteration, demo-driven development, and shipping something real. I've placed top 3 in 5 out of 8 hackathons by focusing on impact over perfection.",
+    defaultIcon: <Zap className="h-5 w-5 text-yellow-500" />,
     gradient: "from-yellow-500/10 to-orange-500/10",
     border: "border-yellow-500/20",
   },
   {
-    icon: <Heart className="h-5 w-5 text-rose-500" />,
-    title: "Real Problems, Real Solutions",
-    body: "Every project starts with a genuine problem. Whether it's attendance fraud, skill-matching, or personalised learning — the tech serves the mission.",
+    defaultIcon: <Heart className="h-5 w-5 text-rose-500" />,
     gradient: "from-rose-500/10 to-pink-500/10",
     border: "border-rose-500/20",
+  },
+];
+
+const DEFAULT_CARDS = [
+  {
+    title: "AI-Augmented Development",
+    body: "I treat AI tools as a superpower — GitHub Copilot, Claude, and ChatGPT are part of my daily workflow, letting me ship faster without sacrificing quality.",
+  },
+  {
+    title: "Hackathon Mindset",
+    body: "Fast iteration, demo-driven development, and shipping something real. I've placed top 3 in 5 out of 8 hackathons by focusing on impact over perfection.",
+  },
+  {
+    title: "Real Problems, Real Solutions",
+    body: "Every project starts with a genuine problem. Whether it's attendance fraud, skill-matching, or personalised learning — the tech serves the mission.",
   },
 ];
 
@@ -60,6 +69,24 @@ export default function About() {
 
   const topSkills = skills.slice(0, 14);
   const ownerName = settings?.ownerName ?? "Portfolio Owner";
+
+  const approachCards = [
+    {
+      title: settings?.card1Title ?? DEFAULT_CARDS[0].title,
+      body: settings?.card1Body ?? DEFAULT_CARDS[0].body,
+      ...CARD_STYLES[0],
+    },
+    {
+      title: settings?.card2Title ?? DEFAULT_CARDS[1].title,
+      body: settings?.card2Body ?? DEFAULT_CARDS[1].body,
+      ...CARD_STYLES[1],
+    },
+    {
+      title: settings?.card3Title ?? DEFAULT_CARDS[2].title,
+      body: settings?.card3Body ?? DEFAULT_CARDS[2].body,
+      ...CARD_STYLES[2],
+    },
+  ];
 
   return (
     <div className="min-h-screen py-20 px-4">
@@ -74,7 +101,7 @@ export default function About() {
         </Reveal>
 
         <div className="grid lg:grid-cols-5 gap-12 mb-16 items-start">
-          {/* Avatar + bio — spans 2 cols */}
+          {/* Avatar + bio */}
           <Reveal className="lg:col-span-2 space-y-6">
             {/* Avatar */}
             <div className="relative w-fit mx-auto lg:mx-0">
@@ -94,7 +121,7 @@ export default function About() {
                   </div>
                 </div>
               )}
-              {/* Online indicator */}
+              {/* Available badge */}
               <div className="absolute -bottom-1.5 -right-1.5 flex items-center gap-1.5 bg-background border border-border rounded-full px-2.5 py-1 shadow-sm">
                 <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
                 <span className="text-xs font-medium text-muted-foreground">Available</span>
@@ -108,7 +135,8 @@ export default function About() {
                 {settings?.ownerTitle ?? "Full Stack Developer"}
               </p>
               <p className="text-muted-foreground leading-relaxed">
-                {settings?.ownerBio ?? "A passionate developer who loves building things that matter."}
+                {settings?.ownerBio ??
+                  "A passionate developer who loves building things that matter."}
               </p>
             </div>
 
@@ -123,21 +151,21 @@ export default function About() {
               )}
               {settings?.githubUrl && (
                 <a href={settings.githubUrl} target="_blank" rel="noopener noreferrer">
-                  <Button size="sm" variant="outline" className="gap-2 px-3">
+                  <Button size="sm" variant="outline" className="px-3">
                     <Github className="h-3.5 w-3.5" />
                   </Button>
                 </a>
               )}
               {settings?.linkedinUrl && (
                 <a href={settings.linkedinUrl} target="_blank" rel="noopener noreferrer">
-                  <Button size="sm" variant="outline" className="gap-2 px-3">
+                  <Button size="sm" variant="outline" className="px-3">
                     <Linkedin className="h-3.5 w-3.5" />
                   </Button>
                 </a>
               )}
               {settings?.twitterUrl && (
                 <a href={settings.twitterUrl} target="_blank" rel="noopener noreferrer">
-                  <Button size="sm" variant="outline" className="gap-2 px-3">
+                  <Button size="sm" variant="outline" className="px-3">
                     <Twitter className="h-3.5 w-3.5" />
                   </Button>
                 </a>
@@ -145,26 +173,26 @@ export default function About() {
             </div>
           </Reveal>
 
-          {/* Approach cards — spans 3 cols */}
+          {/* Approach cards */}
           <div className="lg:col-span-3 space-y-4">
-            {APPROACH_CARDS.map((card, i) => (
-              <Reveal
-                key={card.title}
-                delay={`delay-${(i + 1) * 100}` as Parameters<typeof useScrollReveal>[0]}
-              >
-                <div
-                  className={`bg-gradient-to-br ${card.gradient} border ${card.border} rounded-xl p-5 flex gap-4 transition-all hover:shadow-md`}
-                >
-                  <div className="p-2 bg-background/70 rounded-lg h-fit shrink-0 shadow-sm">
-                    {card.icon}
+            {approachCards.map((card, i) => {
+              const delays = ["delay-100", "delay-200", "delay-300"] as const;
+              return (
+                <Reveal key={i} delay={delays[i]}>
+                  <div
+                    className={`bg-gradient-to-br ${card.gradient} border ${card.border} rounded-xl p-5 flex gap-4 hover:shadow-md transition-all`}
+                  >
+                    <div className="p-2 bg-background/70 rounded-lg h-fit shrink-0 shadow-sm">
+                      {card.defaultIcon}
+                    </div>
+                    <div>
+                      <h3 className="font-semibold mb-1">{card.title}</h3>
+                      <p className="text-muted-foreground text-sm leading-relaxed">{card.body}</p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-semibold mb-1">{card.title}</h3>
-                    <p className="text-muted-foreground text-sm leading-relaxed">{card.body}</p>
-                  </div>
-                </div>
-              </Reveal>
-            ))}
+                </Reveal>
+              );
+            })}
           </div>
         </div>
 

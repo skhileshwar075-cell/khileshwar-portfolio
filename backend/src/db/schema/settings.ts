@@ -18,6 +18,12 @@ export const settingsTable = pgTable("settings", {
   ownerBio: text("owner_bio"),
   avatarUrl: text("avatar_url"),
   primaryColor: text("primary_color"),
+  card1Title: text("card1_title"),
+  card1Body: text("card1_body"),
+  card2Title: text("card2_title"),
+  card2Body: text("card2_body"),
+  card3Title: text("card3_title"),
+  card3Body: text("card3_body"),
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow().$onUpdate(() => new Date()),
 });
 

@@ -21,4 +21,10 @@ export interface SiteSettingsUpdate {
   ownerBio?: string;
   avatarUrl?: string;
   primaryColor?: string;
+  card1Title?: string;
+  card1Body?: string;
+  card2Title?: string;
+  card2Body?: string;
+  card3Title?: string;
+  card3Body?: string;
 }
