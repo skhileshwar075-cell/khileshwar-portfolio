@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useGetSettings, useUpdateSettings } from "@workspace/api-client-react";
-import { Save, User, ImageIcon, AlertCircle } from "lucide-react";
+import { Save, User, ImageIcon, AlertCircle, Upload, Link2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -46,6 +46,9 @@ export default function AdminSettings() {
   const { data: settings, isLoading } = useGetSettings();
   const [form, setForm] = useState<SettingsForm>(emptyForm);
   const [avatarError, setAvatarError] = useState(false);
+  const [avatarTab, setAvatarTab] = useState<"upload" | "url">("upload");
+  const [isDragging, setIsDragging] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (settings) {
@@ -96,6 +99,38 @@ export default function AdminSettings() {
       if (key === "avatarUrl") setAvatarError(false);
     },
   });
+
+  function processFile(file: File) {
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please select an image file (JPG, PNG, WebP, etc.)");
+      return;
+    }
+    if (file.size > 4 * 1024 * 1024) {
+      toast.error("Image must be under 4 MB");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const dataUrl = e.target?.result as string;
+      setForm((f) => ({ ...f, avatarUrl: dataUrl }));
+      setAvatarError(false);
+      toast.success("Photo loaded — click Save Settings to apply");
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function handleFileInput(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (file) processFile(file);
+    e.target.value = "";
+  }
+
+  function handleDrop(e: React.DragEvent) {
+    e.preventDefault();
+    setIsDragging(false);
+    const file = e.dataTransfer.files?.[0];
+    if (file) processFile(file);
+  }
 
   const APPROACH_CARDS = [
     { num: 1, titleKey: "card1Title" as const, bodyKey: "card1Body" as const, label: "Card 1" },
@@ -175,46 +210,111 @@ export default function AdminSettings() {
         {/* ── Profile Picture ── */}
         <section className="bg-card border border-border rounded-xl p-6 space-y-4">
           <h2 className="text-base font-semibold border-b border-border pb-3">Profile Picture</h2>
-          <p className="text-sm text-muted-foreground">
-            Paste a public image URL (e.g. from GitHub, Cloudinary, or any hosted image link).
-          </p>
 
-          <div className="flex gap-4 items-start">
+          {/* Hidden file input */}
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={handleFileInput}
+          />
+
+          <div className="flex gap-5 items-start">
             {/* Preview */}
-            <div className="shrink-0 w-24 h-24 rounded-xl overflow-hidden border border-border bg-muted flex items-center justify-center">
+            <div className="relative shrink-0 w-28 h-28 rounded-2xl overflow-hidden border-2 border-border bg-muted flex items-center justify-center group">
               {form.avatarUrl && !avatarError ? (
-                <img
-                  src={form.avatarUrl}
-                  alt="Avatar preview"
-                  className="w-full h-full object-cover"
-                  onError={() => setAvatarError(true)}
-                />
+                <>
+                  <img
+                    src={form.avatarUrl}
+                    alt="Avatar preview"
+                    className="w-full h-full object-cover"
+                    onError={() => setAvatarError(true)}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => { setForm((f) => ({ ...f, avatarUrl: "" })); setAvatarError(false); }}
+                    className="absolute top-1 right-1 p-0.5 bg-background/80 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-destructive hover:text-destructive-foreground"
+                    title="Remove photo"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                </>
               ) : (
-                <div className="flex flex-col items-center gap-1 text-muted-foreground/50">
-                  <User className="h-8 w-8" />
-                  <span className="text-[10px]">Preview</span>
+                <div className="flex flex-col items-center gap-1.5 text-muted-foreground/40">
+                  <User className="h-10 w-10" />
+                  <span className="text-[10px] font-medium">No photo</span>
                 </div>
               )}
             </div>
 
-            <div className="flex-1 space-y-2">
-              <Label>Avatar URL</Label>
-              <Input
-                {...field("avatarUrl")}
-                type="url"
-                placeholder="https://avatars.githubusercontent.com/u/..."
-              />
-              {avatarError && form.avatarUrl && (
-                <p className="text-xs text-destructive flex items-center gap-1">
-                  <AlertCircle className="h-3.5 w-3.5" />
-                  Could not load image — check the URL is a direct image link.
-                </p>
-              )}
-              {!form.avatarUrl && (
-                <p className="text-xs text-muted-foreground flex items-center gap-1.5">
-                  <ImageIcon className="h-3.5 w-3.5" />
-                  No image set — the About page will show gradient initials instead.
-                </p>
+            {/* Controls */}
+            <div className="flex-1 space-y-3">
+              {/* Tab switcher */}
+              <div className="flex gap-1 p-1 bg-muted rounded-lg w-fit">
+                <button
+                  type="button"
+                  onClick={() => setAvatarTab("upload")}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
+                    avatarTab === "upload"
+                      ? "bg-background shadow-sm text-foreground"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  <Upload className="h-3.5 w-3.5" /> Upload from device
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setAvatarTab("url")}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
+                    avatarTab === "url"
+                      ? "bg-background shadow-sm text-foreground"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  <Link2 className="h-3.5 w-3.5" /> Use URL
+                </button>
+              </div>
+
+              {avatarTab === "upload" ? (
+                /* ── Upload zone ── */
+                <div
+                  onClick={() => fileInputRef.current?.click()}
+                  onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+                  onDragLeave={() => setIsDragging(false)}
+                  onDrop={handleDrop}
+                  className={`cursor-pointer rounded-xl border-2 border-dashed p-5 text-center transition-all ${
+                    isDragging
+                      ? "border-primary bg-primary/5"
+                      : "border-border hover:border-primary/50 hover:bg-muted/50"
+                  }`}
+                >
+                  <Upload className="h-6 w-6 mx-auto mb-2 text-muted-foreground" />
+                  <p className="text-sm font-medium">Click to choose a photo</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">or drag & drop here</p>
+                  <p className="text-xs text-muted-foreground/60 mt-2">JPG, PNG, WebP · Max 4 MB</p>
+                </div>
+              ) : (
+                /* ── URL input ── */
+                <div className="space-y-2">
+                  <Input
+                    {...field("avatarUrl")}
+                    type="url"
+                    placeholder="https://avatars.githubusercontent.com/u/..."
+                  />
+                  {avatarError && form.avatarUrl && (
+                    <p className="text-xs text-destructive flex items-center gap-1">
+                      <AlertCircle className="h-3.5 w-3.5" />
+                      Could not load image — make sure it's a direct image link.
+                    </p>
+                  )}
+                  {!form.avatarUrl && (
+                    <p className="text-xs text-muted-foreground flex items-center gap-1.5">
+                      <ImageIcon className="h-3.5 w-3.5" />
+                      Paste any public image URL (GitHub, Cloudinary, imgur…)
+                    </p>
+                  )}
+                </div>
               )}
             </div>
           </div>
