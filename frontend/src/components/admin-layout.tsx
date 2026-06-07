@@ -145,7 +145,7 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
             className="w-full justify-start text-destructive hover:text-destructive/90 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
             asChild
           >
-            <a href="/api/logout">
+            <a href="/api/auth/logout">
               <LogOut className="h-4 w-4 shrink-0" />
               <span className="ml-2 group-data-[collapsible=icon]:hidden">Log out</span>
             </a>
