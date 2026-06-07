@@ -170,7 +170,7 @@ export default function AdminSettings() {
           <h2 className="text-base font-semibold border-b border-border pb-3">Site Information</h2>
           <div className="space-y-1.5">
             <Label>Site Title</Label>
-            <Input {...field("siteTitle")} placeholder="Alex Chen | Portfolio" />
+            <Input {...field("siteTitle")} placeholder="Shubh Chen | Portfolio" />
           </div>
           <div className="space-y-1.5">
             <Label>Site Description</Label>
@@ -196,7 +196,7 @@ export default function AdminSettings() {
           <div className="grid md:grid-cols-2 gap-4">
             <div className="space-y-1.5">
               <Label>Your Name</Label>
-              <Input {...field("ownerName")} placeholder="Alex Chen" />
+              <Input {...field("ownerName")} placeholder="Shubh Chen" />
             </div>
             <div className="space-y-1.5">
               <Label>Your Title</Label>

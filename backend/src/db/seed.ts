@@ -36,12 +36,12 @@ async function seed() {
 
   // Settings
   await db.insert(settingsTable).values({
-    siteTitle: "Alex Carter — Portfolio",
+    siteTitle: "Shubh Carter — Portfolio",
     siteDescription: "Full-stack engineer specializing in modern web apps, AI integrations, and cloud-native systems.",
     metaKeywords: "full-stack, react, typescript, node, AI, cloud",
     heroText: "Building with intelligence.",
     heroSubtext: "Computer Science graduate & software engineer shipping thoughtful, performant applications.",
-    ownerName: "Alex Carter",
+    ownerName: "Shubh Carter",
     ownerTitle: "Full-Stack Software Engineer",
     ownerBio: "I'm a full-stack engineer with 4+ years of experience building web applications at scale. I care deeply about developer experience, clean architecture, and products that actually solve problems.",
     githubUrl: "https://github.com",
