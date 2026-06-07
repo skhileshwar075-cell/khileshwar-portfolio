@@ -27,7 +27,7 @@ import {
   LogOut,
   Globe,
 } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { Separator } from "./ui/separator";
 
@@ -60,10 +60,23 @@ function AdminTopBar() {
 
 export function AdminLayout({ children }: { children: React.ReactNode }) {
   const [location, setLocation] = useLocation();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const { data, isLoading } = useGetCurrentUser();
   const currentUser = data?.user ?? null;
 
   const isLoginPage = location === "/admin/login";
+
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    try {
+      await fetch("/api/auth/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+    } finally {
+      window.location.href = "/";
+    }
+  };
 
   useEffect(() => {
     if (!isLoading && !currentUser && !isLoginPage) {
@@ -143,12 +156,11 @@ export function AdminLayout({ children }: { children: React.ReactNode }) {
           <Button
             variant="ghost"
             className="w-full justify-start text-destructive hover:text-destructive/90 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
-            asChild
+            onClick={handleLogout}
+            disabled={isLoggingOut}
           >
-            <a href="/api/auth/logout">
-              <LogOut className="h-4 w-4 shrink-0" />
-              <span className="ml-2 group-data-[collapsible=icon]:hidden">Log out</span>
-            </a>
+            <LogOut className="h-4 w-4 shrink-0" />
+            <span className="ml-2 group-data-[collapsible=icon]:hidden">Log out</span>
           </Button>
         </SidebarFooter>
       </Sidebar>

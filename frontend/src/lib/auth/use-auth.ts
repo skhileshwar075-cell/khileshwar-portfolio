@@ -46,8 +46,15 @@ export function useAuth(): AuthState {
     window.location.href = `/api/auth/login?returnTo=${encodeURIComponent(base)}`;
   }, []);
 
-  const logout = useCallback(() => {
-    window.location.href = "/api/auth/logout";
+  const logout = useCallback(async () => {
+    try {
+      await fetch("/api/auth/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+    } finally {
+      window.location.href = "/";
+    }
   }, []);
 
   return {
