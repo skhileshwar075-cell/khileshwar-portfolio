@@ -4,6 +4,8 @@ node_modules/
 
 # ── Build output ────────────────────────────────────────────────
 dist/
+backend/dist/
+frontend/dist/
 build/
 out/
 tmp/
@@ -12,6 +14,7 @@ out-tsc/
 
 # ── Environment & secrets ────────────────────────────────────────
 .env
+.env.local
 .env.*
 !.env.example
 
@@ -38,7 +41,7 @@ pnpm-debug.log*
 .expo/
 .expo-shared/
 
-# ── IDEs ────────────────────────────────────────────────────────
+# ── IDE ────────────────────────────────────────────────────────
 .idea/
 .vscode/*
 !.vscode/settings.json
@@ -51,6 +54,7 @@ pnpm-debug.log*
 .c9/
 *.launch
 .settings/
+.cursor/
 
 # ── OS ──────────────────────────────────────────────────────────
 .DS_Store

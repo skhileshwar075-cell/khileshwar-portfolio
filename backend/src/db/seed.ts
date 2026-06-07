@@ -1,4 +1,4 @@
-import { db } from "./index.js";
+import { db, pool } from "./index.js";
 import {
   settingsTable,
   projectsTable,
@@ -8,6 +8,8 @@ import {
   certificatesTable,
   blogPostsTable,
 } from "./schema/index.js";
+import { adminsTable } from "./schema/index.js";
+import bcrypt from "bcryptjs";
 
 async function seed() {
   console.log("🌱 Seeding database...");
@@ -18,6 +20,18 @@ async function seed() {
   await db.delete(experienceTable);
   await db.delete(skillsTable);
   await db.delete(projectsTable);
+  // Ensure admins table exists (for local/dev databases without migrations)
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS admins (
+      id varchar PRIMARY KEY DEFAULT gen_random_uuid(),
+      email varchar UNIQUE,
+      password_hash varchar,
+      role varchar NOT NULL DEFAULT 'admin',
+      created_at timestamptz NOT NULL DEFAULT now(),
+      updated_at timestamptz NOT NULL DEFAULT now()
+    )
+  `);
+  await db.delete(adminsTable);
   await db.delete(settingsTable);
 
   // Settings
@@ -324,6 +338,16 @@ Pure pairing doesn't scale to every team or every task. What I now advocate for:
     },
   ]);
   console.log("✓ Blog posts");
+
+  // Admin user
+  const adminEmail = "admin@portfolio.com";
+  const adminPasswordHash = bcrypt.hashSync("Admin@123", 10);
+  await db.insert(adminsTable).values({
+    email: adminEmail,
+    passwordHash: adminPasswordHash,
+    role: "admin",
+  });
+  console.log("✓ Admin user created (admin@portfolio.com)");
 
   console.log("\n✅ Seed complete!");
   process.exit(0);

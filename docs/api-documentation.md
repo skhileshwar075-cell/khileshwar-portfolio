@@ -2,16 +2,15 @@
 
 Base URL: `/api`
 
-All protected routes require an authenticated session (Replit Auth). The session cookie is set automatically on login.
+All protected routes require an authenticated session. The backend issues a JWT stored in an HTTP-only `sid` cookie after successful login.
 
 ## Authentication
 
 | Method | Path | Description |
 |--------|------|-------------|
 | GET | `/api/auth/user` | Get current authenticated user (or `{ user: null }`) |
-| GET | `/api/login` | Initiate Replit OIDC login flow |
-| GET | `/api/logout` | Clear session and redirect |
-| GET | `/api/callback` | OIDC callback handler |
+| POST | `/api/auth/login` | Authenticate admin credentials and set session cookie |
+| POST | `/api/auth/logout` | Clear session cookie and log out |
 
 ## Projects
 

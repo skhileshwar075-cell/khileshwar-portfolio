@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import {
-  useGetDashboardSummary,
+  useGetPublicSummary,
   useListProjects,
   useListBlogPosts,
   useGetSettings,
@@ -124,7 +124,11 @@ const CATEGORY_LABEL_COLORS: Record<string, string> = {
 /* ═══════════════════════════════════════════════════════════════════ */
 export default function Home() {
   const { data: settings, isLoading: isSettingsLoading } = useGetSettings();
-  const { data: summary, isLoading: isSummaryLoading } = useGetDashboardSummary();
+  const {
+    data: summary,
+    isLoading: isSummaryLoading,
+    isError: isSummaryError,
+  } = useGetPublicSummary();
   const { data: featuredProjects, isLoading: isProjectsLoading } = useListProjects({ featured: true });
   const { data: recentPosts, isLoading: isPostsLoading } = useListBlogPosts({ published: true });
   const trackEvent = useTrackEvent();
@@ -279,22 +283,28 @@ export default function Home() {
       {/* ══════════════ STATS ══════════════ */}
       <section className="py-14 border-y bg-gradient-to-r from-muted/50 via-muted/20 to-muted/50">
         <div className="container mx-auto px-4 md:px-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            {stats.map(({ label, value }) => (
-              <div key={label} className="space-y-1">
-                <div className="text-4xl md:text-5xl font-bold font-mono text-primary">
-                  {isSummaryLoading ? (
-                    <span className="opacity-25">—</span>
-                  ) : (
-                    <AnimatedCounter target={value} />
-                  )}
+          {isSummaryError ? (
+            <div className="rounded-3xl border border-border bg-card p-8 text-center text-sm text-muted-foreground">
+              Unable to load public stats right now. Please refresh the page.
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+              {stats.map(({ label, value }) => (
+                <div key={label} className="space-y-1">
+                  <div className="text-4xl md:text-5xl font-bold font-mono text-primary">
+                    {isSummaryLoading ? (
+                      <span className="opacity-25">—</span>
+                    ) : (
+                      <AnimatedCounter target={value} />
+                    )}
+                  </div>
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">
+                    {label}
+                  </p>
                 </div>
-                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">
-                  {label}
-                </p>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 

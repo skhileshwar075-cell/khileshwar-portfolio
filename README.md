@@ -7,13 +7,45 @@ A full-stack portfolio content management system for a CS graduate and AI-assist
 ```bash
 # Install dependencies
 pnpm install
+```
 
-# Push DB schema
-pnpm --filter @workspace/backend run db:push
+If you want to install only one side of the project:
 
-# Start development servers (via Replit workflows, or manually):
-pnpm --filter @workspace/frontend run dev   # http://localhost:PORT/
-pnpm --filter @workspace/backend  run dev   # http://localhost:8080/api
+```bash
+cd frontend && pnpm install && cd ..
+cd backend && pnpm install && cd ..
+```
+
+## Run the backend
+
+```bash
+cd backend
+pnpm run dev
+```
+
+The backend reads `backend/.env` for `DATABASE_URL` and `SESSION_SECRET`. Copy `backend/.env.example` to `backend/.env` and update values before starting.
+
+Run the seed script to populate demo content and create a default admin user:
+
+```bash
+cd backend
+pnpm run db:seed
+```
+
+The seeded admin user is `admin@portfolio.com` / `Admin@123`.
+
+## Run the frontend
+
+```bash
+cd frontend
+pnpm run dev
+```
+
+## Optional production build
+
+```bash
+cd frontend
+pnpm run build
 ```
 
 ## Project Structure
@@ -60,7 +92,7 @@ portfolio-cms/
 | Backend | Express 5, Node.js 24, TypeScript |
 | Database | PostgreSQL + Drizzle ORM |
 | Validation | Zod (generated from OpenAPI spec) |
-| Auth | Replit Auth (OIDC / PKCE) |
+| Auth | Local JWT auth with bcrypt and HTTP-only cookie |
 
 ## Public Routes
 

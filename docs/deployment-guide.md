@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-- Replit account with a provisioned PostgreSQL database
+- PostgreSQL database available for the backend
 - `DATABASE_URL` environment variable set
 - `SESSION_SECRET` environment variable set (32+ random chars)
 
@@ -20,7 +20,7 @@
 Start both services:
 
 ```bash
-# In separate terminals (or use Replit workflows)
+# In separate terminals
 pnpm --filter @workspace/frontend run dev   # Vite dev server
 pnpm --filter @workspace/backend  run dev   # Express API
 ```
@@ -35,17 +35,15 @@ pnpm --filter @workspace/backend run db:push
 pnpm --filter @workspace/backend/api-spec run codegen
 ```
 
-## Production (Replit Deploy)
+## Production
 
-1. Click **Deploy** in the Replit editor
-2. Replit builds the frontend (`vite build`) and backend (`esbuild`)
-3. Static frontend is served from `frontend/dist/public`
-4. The Express backend runs as a long-lived process on `/api/*`
-5. The reverse proxy routes traffic to each service automatically
+Deploy the frontend as a static site and run the backend on a Node host. The backend exposes `/api/*`, and the frontend should proxy or route requests to that API.
+
+If deploying to Replit, ensure `DATABASE_URL` and `SESSION_SECRET` are configured in Replit Secrets.
 
 ## CI Checklist
 
-- [ ] `DATABASE_URL` and `SESSION_SECRET` are set in Replit Secrets
+- [ ] `DATABASE_URL` and `SESSION_SECRET` are set in environment configuration
 - [ ] Schema is up to date (`db:push` was run)
 - [ ] No TypeScript errors (`pnpm --filter @workspace/frontend run typecheck`)
 - [ ] API health check passes (`GET /api/healthz`)

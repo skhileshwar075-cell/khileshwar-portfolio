@@ -11,6 +11,7 @@ import contactsRouter from "./contacts";
 import analyticsRouter from "./analytics";
 import settingsRouter from "./settings";
 import dashboardRouter from "./dashboard";
+import publicRouter from "./public";
 
 const router: IRouter = Router();
 
@@ -26,5 +27,6 @@ router.use(contactsRouter);
 router.use(analyticsRouter);
 router.use(settingsRouter);
 router.use(dashboardRouter);
+router.use(publicRouter);
 
 export default router;

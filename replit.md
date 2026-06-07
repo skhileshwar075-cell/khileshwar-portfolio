@@ -18,7 +18,7 @@ A full-stack portfolio CMS for a CS graduate/AI-assisted developer with a public
 - API: Express 5 (port 8080)
 - DB: PostgreSQL + Drizzle ORM
 - Validation: Zod (`zod/v4`), `drizzle-zod`
-- Auth: Replit Auth (OIDC/PKCE)
+- Auth: Local JWT auth with bcrypt and HTTP-only cookie
 - API codegen: Orval (from OpenAPI spec)
 - Build: esbuild (ESM bundle)
 
@@ -27,7 +27,7 @@ A full-stack portfolio CMS for a CS graduate/AI-assisted developer with a public
 - `frontend/` — React+Vite SPA (`@workspace/frontend`, port 21113)
   - `frontend/src/pages/` — public portfolio pages + admin dashboard
   - `frontend/src/api/` — inlined API client (React Query hooks, generated from OpenAPI)
-  - `frontend/src/lib/auth/` — Replit Auth client hook
+  - `frontend/src/lib/auth/` — auth hooks and current login flow for admin session state
   - `frontend/src/components/` — shared UI components (shadcn/ui)
 - `backend/` — Express 5 API server (`@workspace/backend`, port 8080)
   - `backend/src/db/` — Drizzle ORM schema + migrations (was `lib/db`)
@@ -49,7 +49,7 @@ A full-stack portfolio CMS for a CS graduate/AI-assisted developer with a public
 ## Product
 
 - **Public portfolio**: Home, About, Projects, Skills, Experience, Education, Certifications, Blog, Contact pages
-- **Admin dashboard**: Protected CMS for managing all portfolio content (Replit Auth required)
+- **Admin dashboard**: Protected CMS for managing all portfolio content (JWT auth required)
 
 ## User preferences
 

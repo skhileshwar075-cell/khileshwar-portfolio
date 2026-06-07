@@ -12,8 +12,8 @@ for (const lockfile of ["package-lock.json", "yarn.lock"]) {
   }
 }
 
-const agent = process.env.npm_config_user_agent ?? "";
-if (!agent.startsWith("pnpm/")) {
+const agent = process.env.npm_config_user_agent ?? process.env.npm_execpath ?? "";
+if (!agent.includes("pnpm")) {
   process.stderr.write(
     "ERROR: Please use pnpm to install dependencies.\n" +
       "  Run: corepack enable && pnpm install\n"

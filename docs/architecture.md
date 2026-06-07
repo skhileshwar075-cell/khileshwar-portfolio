@@ -40,7 +40,7 @@ Browser → Reverse Proxy (path-based)
 | ORM | Drizzle ORM |
 | Schema | `backend/src/db/schema/` |
 | Validation | Zod (auto-generated from OpenAPI) |
-| Auth | Replit Auth (OpenID Connect / PKCE) |
+| Auth | Local JWT auth with bcrypt and HTTP-only cookie |
 
 ## API Contract
 
@@ -52,10 +52,10 @@ Run codegen: `pnpm --filter @workspace/backend run codegen` (from workspace root
 
 ## Auth
 
-Authentication uses Replit Auth (OIDC). Sessions are stored server-side in the `sessions` DB table. The frontend calls `/api/auth/user` to check session state.
+Authentication uses local JWT sessions stored in an HTTP-only `sid` cookie. Admin credentials are validated against `backend/src/db/schema/auth.ts`, and the frontend checks login status via `/api/auth/user`.
 
 ## Database Schema
 
-Tables: `projects`, `skills`, `experience`, `education`, `certificates`, `blog_posts`, `contacts`, `analytics`, `settings`, `users`, `sessions`
+Tables: `projects`, `skills`, `experience`, `education`, `certificates`, `blog_posts`, `contacts`, `analytics`, `settings`, `users`, `sessions`, `admins`
 
 Push schema changes: `pnpm --filter @workspace/backend run db:push`
