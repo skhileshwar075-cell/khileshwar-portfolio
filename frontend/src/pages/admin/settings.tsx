@@ -86,9 +86,15 @@ export default function AdminSettings() {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const payload = Object.fromEntries(
-      Object.entries(form).map(([k, v]) => [k, v || undefined])
-    );
+    const payload: Record<string, string | undefined> = {};
+    for (const [k, v] of Object.entries(form)) {
+      // avatarUrl must always be sent (even as empty string) so the backend can clear it
+      if (k === "avatarUrl") {
+        payload[k] = v;
+      } else {
+        payload[k] = v || undefined;
+      }
+    }
     updateSettings({ data: payload });
   }
 
@@ -221,30 +227,31 @@ export default function AdminSettings() {
           />
 
           <div className="flex gap-5 items-start">
-            {/* Preview */}
-            <div className="relative shrink-0 w-28 h-28 rounded-2xl overflow-hidden border-2 border-border bg-muted flex items-center justify-center group">
-              {form.avatarUrl && !avatarError ? (
-                <>
+            {/* Preview + remove */}
+            <div className="shrink-0 flex flex-col items-center gap-2">
+              <div className="w-28 h-28 rounded-2xl overflow-hidden border-2 border-border bg-muted flex items-center justify-center">
+                {form.avatarUrl && !avatarError ? (
                   <img
                     src={form.avatarUrl}
                     alt="Avatar preview"
                     className="w-full h-full object-cover"
                     onError={() => setAvatarError(true)}
                   />
-                  <button
-                    type="button"
-                    onClick={() => { setForm((f) => ({ ...f, avatarUrl: "" })); setAvatarError(false); }}
-                    className="absolute top-1 right-1 p-0.5 bg-background/80 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-destructive hover:text-destructive-foreground"
-                    title="Remove photo"
-                  >
-                    <X className="h-3.5 w-3.5" />
-                  </button>
-                </>
-              ) : (
-                <div className="flex flex-col items-center gap-1.5 text-muted-foreground/40">
-                  <User className="h-10 w-10" />
-                  <span className="text-[10px] font-medium">No photo</span>
-                </div>
+                ) : (
+                  <div className="flex flex-col items-center gap-1.5 text-muted-foreground/40">
+                    <User className="h-10 w-10" />
+                    <span className="text-[10px] font-medium">No photo</span>
+                  </div>
+                )}
+              </div>
+              {form.avatarUrl && !avatarError && (
+                <button
+                  type="button"
+                  onClick={() => { setForm((f) => ({ ...f, avatarUrl: "" })); setAvatarError(false); }}
+                  className="flex items-center gap-1 text-xs text-destructive hover:underline"
+                >
+                  <X className="h-3 w-3" /> Remove
+                </button>
               )}
             </div>
 
