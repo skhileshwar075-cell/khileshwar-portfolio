@@ -233,8 +233,16 @@
   opacity: 0;
   transform: translateY(24px);
   transition: opacity 0.55s ease-out, transform 0.55s ease-out;
+  will-change: opacity, transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  perspective: 1000px;
+  -webkit-perspective: 1000px;
 }
-.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal.visible { 
+  opacity: 1; 
+  transform: translateY(0); 
+}
 .reveal.delay-100 { transition-delay: 0.1s; }
 .reveal.delay-200 { transition-delay: 0.2s; }
 .reveal.delay-300 { transition-delay: 0.3s; }

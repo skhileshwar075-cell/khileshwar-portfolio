@@ -15,20 +15,27 @@ out-tsc/
 # ── Environment & secrets ────────────────────────────────────────
 .env
 .env.local
-.env.*
+.env.*.local
+.env.development.local
+.env.test.local
+.env.production.local
 !.env.example
 
 # ── Database ─────────────────────────────────────────────────────
 drizzle/
+migrations/
 *.sqlite
 *.sqlite-shm
 *.sqlite-wal
+.drizzle/
 
 # ── Logs ────────────────────────────────────────────────────────
 *.log
 npm-debug.log*
 yarn-error.log
 pnpm-debug.log*
+pnpm-error.log*
+lerna-debug.log*
 /coverage/
 /libpeerconnection.log
 
@@ -36,10 +43,13 @@ pnpm-debug.log*
 .vite/
 /.sass-cache/
 /typings/
+*.swp
+*.swo
 
 # ── Expo / React Native ─────────────────────────────────────────
 .expo/
 .expo-shared/
+.expo-cache/
 
 # ── IDE ────────────────────────────────────────────────────────
 .idea/
@@ -48,6 +58,7 @@ pnpm-debug.log*
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+.vscode_test/
 *.sublime-workspace
 .project
 .classpath
@@ -55,18 +66,28 @@ pnpm-debug.log*
 *.launch
 .settings/
 .cursor/
+*.iml
 
 # ── OS ──────────────────────────────────────────────────────────
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
 desktop.ini
 
 # ── Replit ──────────────────────────────────────────────────────
 .cache/
 .local/
+.replit-artifact/
 
 # ── Misc ────────────────────────────────────────────────────────
 /connect.lock
 testem.log
 .cursor/rules/nx-rules.mdc
 .github/instructions/nx.instructions.md
+*.orig
+.husky/
+.env.vault

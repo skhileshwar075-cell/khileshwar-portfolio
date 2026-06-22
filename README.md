@@ -5,48 +5,35 @@ A full-stack portfolio content management system for a CS graduate and AI-assist
 ## Quick Start
 
 ```bash
-# Install dependencies
+# 1. Install dependencies
 pnpm install
-```
 
-If you want to install only one side of the project:
+# 2. Approve build scripts if prompted
+pnpm approve-builds
 
-```bash
-cd frontend && pnpm install && cd ..
-cd backend && pnpm install && cd ..
-```
+# 3. Configure backend environment
+# Copy backend/.env.example to backend/.env and update DATABASE_URL
 
-## Run the backend
-
-```bash
+# 4. Create and seed database
 cd backend
-pnpm run dev
-```
-
-The backend reads `backend/.env` for `DATABASE_URL` and `SESSION_SECRET`. Copy `backend/.env.example` to `backend/.env` and update values before starting.
-
-Run the seed script to populate demo content and create a default admin user:
-
-```bash
-cd backend
+node scripts/create_db.mjs "postgres://postgres:123456@localhost:5432/postgres" "portfolio"
+pnpm run db:push
 pnpm run db:seed
+cd ..
+
+# 5. Start development servers
+# Terminal 1:
+cd backend && pnpm run dev
+
+# Terminal 2:
+cd frontend && pnpm run dev
 ```
 
-The seeded admin user is `admin@portfolio.com` / `Admin@123`.
+**Frontend:** http://localhost:5173  
+**Backend API:** http://localhost:8080/api  
+**Admin Dashboard:** http://localhost:5173/admin
 
-## Run the frontend
-
-```bash
-cd frontend
-pnpm run dev
-```
-
-## Optional production build
-
-```bash
-cd frontend
-pnpm run build
-```
+> For detailed setup instructions, see [docs/setup.md](docs/setup.md)
 
 ## Project Structure
 

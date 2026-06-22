@@ -100,9 +100,9 @@ export default function About() {
           </h1>
         </Reveal>
 
-        <div className="grid lg:grid-cols-5 gap-12 mb-16 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 mb-16 items-start w-full">
           {/* Avatar + bio */}
-          <Reveal className="lg:col-span-2 space-y-6">
+          <Reveal className="lg:col-span-2 space-y-6 w-full">
             {/* Avatar */}
             <div className="relative w-fit mx-auto lg:mx-0">
               {settings?.avatarUrl ? (
@@ -174,7 +174,7 @@ export default function About() {
           </Reveal>
 
           {/* Approach cards */}
-          <div className="lg:col-span-3 space-y-4">
+          <div className="lg:col-span-3 space-y-4 w-full">
             {approachCards.map((card, i) => {
               const delays = ["delay-100", "delay-200", "delay-300"] as const;
               return (
@@ -198,7 +198,7 @@ export default function About() {
 
         {/* Skills cloud */}
         {topSkills.length > 0 && (
-          <Reveal>
+          <Reveal className="w-full">
             <div className="border border-border rounded-xl p-6 bg-muted/20">
               <h2 className="text-xl font-bold mb-4">Tech I Work With</h2>
               <div className="flex flex-wrap gap-2">
