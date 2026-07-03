@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 
-const CATEGORIES = ["Frontend", "Backend", "Database", "Testing", "AI Tools", "DevOps", "Other"];
+const CATEGORIES = ["Languages", "Frontend", "Backend", "Database", "Testing", "AI Tools", "DevOps", "Other"];
 
 type SkillForm = { name: string; category: string; level: string; };
 const emptyForm: SkillForm = { name: "", category: "Frontend", level: "80" };

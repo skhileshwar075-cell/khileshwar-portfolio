@@ -223,10 +223,23 @@ export interface Certificate {
   issuer: string;
   issueDate: string;
   /** @nullable */
+  expirationDate?: string | null;
+  /** @nullable */
+  credentialId?: string | null;
+  /** @nullable */
   credentialUrl?: string | null;
   /** @nullable */
+  description?: string | null;
+  /** @nullable */
+  duration?: string | null;
+  /** @nullable */
+  grade?: string | null;
+  skills?: string[];
+  /** @nullable */
   imageUrl?: string | null;
+  featured: boolean;
   createdAt: string;
+  updatedAt: string;
 }
 
 export interface CertificateInput {
@@ -235,16 +248,30 @@ export interface CertificateInput {
   /** @minLength 1 */
   issuer: string;
   issueDate: string;
+  expirationDate?: string;
+  credentialId?: string;
   credentialUrl?: string;
+  description?: string;
+  duration?: string;
+  grade?: string;
+  skills?: string[];
   imageUrl?: string;
+  featured?: boolean;
 }
 
 export interface CertificateUpdate {
   title?: string;
   issuer?: string;
   issueDate?: string;
+  expirationDate?: string;
+  credentialId?: string;
   credentialUrl?: string;
+  description?: string;
+  duration?: string;
+  grade?: string;
+  skills?: string[];
   imageUrl?: string;
+  featured?: boolean;
 }
 
 export interface BlogPost {

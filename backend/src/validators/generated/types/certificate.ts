@@ -12,8 +12,21 @@ export interface Certificate {
   issuer: string;
   issueDate: string;
   /** @nullable */
+  expirationDate?: string | null;
+  /** @nullable */
+  credentialId?: string | null;
+  /** @nullable */
   credentialUrl?: string | null;
   /** @nullable */
+  description?: string | null;
+  /** @nullable */
+  duration?: string | null;
+  /** @nullable */
+  grade?: string | null;
+  skills?: string[];
+  /** @nullable */
   imageUrl?: string | null;
+  featured: boolean;
   createdAt: string;
+  updatedAt: string;
 }

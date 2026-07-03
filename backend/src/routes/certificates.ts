@@ -1,5 +1,5 @@
 import { Router, type IRouter } from "express";
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { db, certificatesTable } from "@workspace/db";
 import {
   CreateCertificateBody,
@@ -11,7 +11,10 @@ import {
 const router: IRouter = Router();
 
 router.get("/certificates", async (_req, res): Promise<void> => {
-  const certs = await db.select().from(certificatesTable).orderBy(certificatesTable.createdAt);
+  const certs = await db
+    .select()
+    .from(certificatesTable)
+    .orderBy(desc(certificatesTable.featured), desc(certificatesTable.createdAt));
   res.json(certs);
 });
 

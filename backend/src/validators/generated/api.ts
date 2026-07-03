@@ -455,9 +455,17 @@ export const ListCertificatesResponseItem = zod.object({
   "title": zod.string(),
   "issuer": zod.string(),
   "issueDate": zod.string(),
+  "expirationDate": zod.string().nullish(),
+  "credentialId": zod.string().nullish(),
   "credentialUrl": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "duration": zod.string().nullish(),
+  "grade": zod.string().nullish(),
+  "skills": zod.array(zod.string()).optional(),
   "imageUrl": zod.string().nullish(),
-  "createdAt": zod.string()
+  "featured": zod.boolean(),
+  "createdAt": zod.string(),
+  "updatedAt": zod.string()
 })
 export const ListCertificatesResponse = zod.array(ListCertificatesResponseItem)
 
@@ -473,8 +481,15 @@ export const CreateCertificateBody = zod.object({
   "title": zod.string().min(1),
   "issuer": zod.string().min(1),
   "issueDate": zod.string(),
+  "expirationDate": zod.string().optional(),
+  "credentialId": zod.string().optional(),
   "credentialUrl": zod.string().optional(),
-  "imageUrl": zod.string().optional()
+  "description": zod.string().optional(),
+  "duration": zod.string().optional(),
+  "grade": zod.string().optional(),
+  "skills": zod.array(zod.string()).optional(),
+  "imageUrl": zod.string().optional(),
+  "featured": zod.boolean().optional(),
 })
 
 
@@ -489,8 +504,15 @@ export const UpdateCertificateBody = zod.object({
   "title": zod.string().optional(),
   "issuer": zod.string().optional(),
   "issueDate": zod.string().optional(),
+  "expirationDate": zod.string().optional(),
+  "credentialId": zod.string().optional(),
   "credentialUrl": zod.string().optional(),
-  "imageUrl": zod.string().optional()
+  "description": zod.string().optional(),
+  "duration": zod.string().optional(),
+  "grade": zod.string().optional(),
+  "skills": zod.array(zod.string()).optional(),
+  "imageUrl": zod.string().optional(),
+  "featured": zod.boolean().optional(),
 })
 
 export const UpdateCertificateResponse = zod.object({
@@ -498,9 +520,17 @@ export const UpdateCertificateResponse = zod.object({
   "title": zod.string(),
   "issuer": zod.string(),
   "issueDate": zod.string(),
+  "expirationDate": zod.string().nullish(),
+  "credentialId": zod.string().nullish(),
   "credentialUrl": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "duration": zod.string().nullish(),
+  "grade": zod.string().nullish(),
+  "skills": zod.array(zod.string()).optional(),
   "imageUrl": zod.string().nullish(),
-  "createdAt": zod.string()
+  "featured": zod.boolean(),
+  "createdAt": zod.string(),
+  "updatedAt": zod.string()
 })
 
 

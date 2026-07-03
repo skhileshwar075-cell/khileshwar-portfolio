@@ -10,6 +10,13 @@ export interface CertificateUpdate {
   title?: string;
   issuer?: string;
   issueDate?: string;
+  expirationDate?: string;
+  credentialId?: string;
   credentialUrl?: string;
+  description?: string;
+  duration?: string;
+  grade?: string;
+  skills?: string[];
   imageUrl?: string;
+  featured?: boolean;
 }
