@@ -52,6 +52,8 @@ export default function AdminSettings() {
 
   useEffect(() => {
     if (settings) {
+      const settingsFields = settings as unknown as Partial<SettingsForm>;
+
       setForm({
         siteTitle: settings.siteTitle ?? "",
         siteDescription: settings.siteDescription ?? "",
@@ -66,12 +68,12 @@ export default function AdminSettings() {
         twitterUrl: settings.twitterUrl ?? "",
         resumeUrl: settings.resumeUrl ?? "",
         metaKeywords: settings.metaKeywords ?? "",
-        card1Title: settings.card1Title ?? emptyForm.card1Title,
-        card1Body: settings.card1Body ?? emptyForm.card1Body,
-        card2Title: settings.card2Title ?? emptyForm.card2Title,
-        card2Body: settings.card2Body ?? emptyForm.card2Body,
-        card3Title: settings.card3Title ?? emptyForm.card3Title,
-        card3Body: settings.card3Body ?? emptyForm.card3Body,
+        card1Title: settingsFields.card1Title ?? emptyForm.card1Title,
+        card1Body: settingsFields.card1Body ?? emptyForm.card1Body,
+        card2Title: settingsFields.card2Title ?? emptyForm.card2Title,
+        card2Body: settingsFields.card2Body ?? emptyForm.card2Body,
+        card3Title: settingsFields.card3Title ?? emptyForm.card3Title,
+        card3Body: settingsFields.card3Body ?? emptyForm.card3Body,
       });
       setAvatarError(false);
     }
@@ -155,7 +157,7 @@ export default function AdminSettings() {
   }
 
   return (
-    <div className="p-6">
+    <div className="p-6 mx-auto max-w-5xl">
       <div className="mb-6">
         <h1 className="text-2xl font-bold">Site Settings</h1>
         <p className="text-muted-foreground text-sm">
@@ -163,7 +165,7 @@ export default function AdminSettings() {
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-8 max-w-2xl">
+      <form onSubmit={handleSubmit} className="space-y-8 max-w-2xl mx-auto">
 
         {/* ── Site Info ── */}
         <section className="bg-card border border-border rounded-xl p-6 space-y-4">
